@@ -8,6 +8,6 @@ defmodule ElixirProjectWeb.Router do
   scope "/api", ElixirProjectWeb do
     pipe_through :api
 
-    get "/", DefaulController, :index
+    get "/", DefaultController, :index
   end
 end
