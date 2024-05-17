@@ -2,8 +2,8 @@ import Config
 
 # Configure your database
 config :elixir_project, ElixirProject.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "elixir_user",
+  password: "S3cret",
   hostname: "localhost",
   database: "elixir_project_dev",
   stacktrace: true,
