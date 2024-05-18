@@ -7,7 +7,7 @@ down:
 	docker-compose down
 
 setup:
-	make build
+	mix setup
 
 build:
 	mix do deps.get + compile
