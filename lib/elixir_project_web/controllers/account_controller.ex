@@ -24,6 +24,14 @@ defmodule ElixirProjectWeb.AccountController do
     end
   end
 
+  def sign_in(conn, %{"email" => email, "hash_password" => hash_password}) do
+    with {:ok, account, token} <- Guardian.authenticate(email, hash_password) do
+        conn
+        |> put_status(:ok)
+        |> render(:account_token, %{account: account, token: token})
+    end
+  end
+
   def show(conn, %{"id" => id}) do
     account = Accounts.get_account!(id)
     render(conn, :show, account: account)

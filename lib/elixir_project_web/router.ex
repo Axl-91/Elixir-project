@@ -10,5 +10,6 @@ defmodule ElixirProjectWeb.Router do
 
     get "/", DefaultController, :index
     post "/accounts/create", AccountController, :create
+    post "/accounts/sign_in", AccountController, :sign_in
   end
 end

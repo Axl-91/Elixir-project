@@ -21,4 +21,12 @@ defmodule ElixirProjectWeb.FallbackController do
     |> put_view(html: ElixirProjectWeb.ErrorHTML, json: ElixirProjectWeb.ErrorJSON)
     |> render(:"404")
   end
+
+  # This clause is an example of how to handle an unauthorized request.
+  def call(conn, {:error, :unauthorized}) do
+    conn
+    |> put_status(:unauthorized)
+    |> put_view(html: ElixirProjectWeb.ErrorHTML, json: ElixirProjectWeb.ErrorJSON)
+    |> render(:"401")
+  end
 end
