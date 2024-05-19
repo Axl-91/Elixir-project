@@ -15,6 +15,17 @@ defmodule ElixirProjectWeb.AccountJSON do
     %{data: data(account)}
   end
 
+  @doc """
+  Renders a single account with his token
+  """
+  def account_token(%{account: account, token: token}) do
+    %{
+      id: account.id,
+      email: account.email,
+      token: token
+    }
+  end
+
   defp data(%Account{} = account) do
     %{
       id: account.id,

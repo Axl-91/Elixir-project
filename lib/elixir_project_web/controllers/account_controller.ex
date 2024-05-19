@@ -1,6 +1,9 @@
 defmodule ElixirProjectWeb.AccountController do
   use ElixirProjectWeb, :controller
 
+  alias ElixirProject.Users
+  alias ElixirProject.Users.User
+  alias ElixirProjectWeb.Auth.Guardian
   alias ElixirProject.Accounts
   alias ElixirProject.Accounts.Account
 
@@ -12,10 +15,12 @@ defmodule ElixirProjectWeb.AccountController do
   end
 
   def create(conn, %{"account" => account_params}) do
-    with {:ok, %Account{} = account} <- Accounts.create_account(account_params) do
+    with {:ok, %Account{} = account} <- Accounts.create_account(account_params),
+          {:ok, token, _claims} <- Guardian.encode_and_sign(account),
+          {:ok, %User{} = _user} <- Users.create_user(account, account_params) do
       conn
       |> put_status(:created)
-      |> render(:show, account: account)
+      |> render(:account_token, account: account, token: token)
     end
   end
 
