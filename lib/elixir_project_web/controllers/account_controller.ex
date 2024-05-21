@@ -1,13 +1,27 @@
 defmodule ElixirProjectWeb.AccountController do
   use ElixirProjectWeb, :controller
 
+  alias ElixirProjectWeb.Auth.ErrorResponse
   alias ElixirProject.Users
   alias ElixirProject.Users.User
   alias ElixirProjectWeb.Auth.Guardian
   alias ElixirProject.Accounts
   alias ElixirProject.Accounts.Account
 
+  plug :is_authorized_account when action in [:update, :delete]
+
   action_fallback ElixirProjectWeb.FallbackController
+
+  defp is_authorized_account(conn, _opts) do
+    %{params: %{"account" => params}} = conn
+    account = Accounts.get_account!(params["id"])
+
+    if conn.assigns.account.id == account.id do
+      conn
+    else
+      raise ErrorResponse.Forbidden
+    end
+  end
 
   def index(conn, _params) do
     accounts = Accounts.list_accounts()
@@ -38,8 +52,8 @@ defmodule ElixirProjectWeb.AccountController do
     render(conn, :show, account: account)
   end
 
-  def update(conn, %{"id" => id, "account" => account_params}) do
-    account = Accounts.get_account!(id)
+  def update(conn, %{"account" => account_params}) do
+    account = Accounts.get_account!(account_params["id"])
 
     with {:ok, %Account{} = account} <- Accounts.update_account(account, account_params) do
       render(conn, :show, account: account)

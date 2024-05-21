@@ -32,5 +32,7 @@ defmodule ElixirProjectWeb.Router do
     pipe_through [:api, :auth]
 
     get "/account/:id", AccountController, :show
+    post "/account/update", AccountController, :update
+    delete "/account/delete/:id", AccountController, :delete
   end
 end
