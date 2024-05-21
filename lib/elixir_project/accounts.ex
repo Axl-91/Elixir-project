@@ -37,6 +37,22 @@ defmodule ElixirProject.Accounts do
   """
   def get_account!(id), do: Repo.get!(Account, id)
 
+  @doc """
+  Gets a single account.
+
+  Returns nil if the Account does not exist.
+
+  ## Examples
+
+      iex> get_account!(123)
+      %Account{}
+
+      iex> get_account!(456)
+      nil
+
+  """
+  def get_account(id), do: Repo.get(Account, id)
+
   def get_account_by_email(email) do
     Account
     |> where(email: ^email)
