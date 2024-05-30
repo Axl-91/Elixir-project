@@ -1,18 +1,57 @@
-# ElixirProject
+# Elixir REST API Project
 
-To start your Phoenix server:
+Simple REST API Project in Elixir
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+To run the API:
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+```
+make up
+make run
+```
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+## Schemas
 
-## Learn more
+### Accounts
+The accounts contains:
+1. Email
+2. Password
+3. User
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+### Users
+The users contains
+1. Full name
+2. Gender
+3. Biography
+
+There are 9 endpoints to test it, all are located in `localhost:4000/api`
+
+## Endpoints
+
+### "/"
+Root from api, only displays a welcome message
+
+### POST /accounts/create
+Creates a new account.
+As parameters it receives in Json format the parameters from the account and user.
+It verifies that the email is valid.
+
+### POST /accounts/sign_in
+Given a email and a password in Json format it signs in on the API.
+
+### GET /account/:id
+Shows the data of the given id
+
+## POST /account/update
+Receives an id from an account and the parameters to modify and updates the account
+
+## GET /accounts/sign_out
+Signs out the account on the API
+
+## GET /accounts/refresh_session
+Refresh the session token
+
+## DELETE /account/delete/:id
+Deletes the account that belongs to the given id
+
+## POST /users/update", UserController
+Receives an id from the user and the parameters to modify and updates the user

@@ -6,13 +6,13 @@ up:
 down:
 	docker-compose down
 
-setup:
-	mix setup
-
 build:
 	mix do deps.get + compile
 
-run:
+migrate: build
+	mix ecto.migrate
+
+run: build migrate
 	iex -S mix phx.server
 
 run-server-only:
