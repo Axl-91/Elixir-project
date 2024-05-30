@@ -25,7 +25,7 @@ There are 9 endpoints to test it, all are located in `localhost:4000/api`
 
 ## Endpoints
 
-### "/"
+### GET "/"
 Root from api, only displays a welcome message
 
 ### POST /accounts/create
