@@ -12,13 +12,11 @@ make run
 ## Schemas
 
 ### Accounts
-The accounts contains:
 1. Email
 2. Password
 3. User
 
 ### Users
-The users contains
 1. Full name
 2. Gender
 3. Biography
@@ -41,17 +39,17 @@ Given a email and a password in Json format it signs in on the API.
 ### GET /account/:id
 Shows the data of the given id
 
-## POST /account/update
+### POST /account/update
 Receives an id from an account and the parameters to modify and updates the account
 
-## GET /accounts/sign_out
+### GET /accounts/sign_out
 Signs out the account on the API
 
-## GET /accounts/refresh_session
+### GET /accounts/refresh_session
 Refresh the session token
 
-## DELETE /account/delete/:id
+### DELETE /account/delete/:id
 Deletes the account that belongs to the given id
 
-## POST /users/update", UserController
+### POST /users/update", UserController
 Receives an id from the user and the parameters to modify and updates the user
