@@ -51,5 +51,5 @@ Refresh the session token
 ### DELETE /account/delete/:id
 Deletes the account that belongs to the given id
 
-### POST /users/update", UserController
+### POST /users/update"
 Receives an id from the user and the parameters to modify and updates the user
