@@ -34,6 +34,8 @@ defmodule ElixirProjectWeb.Router do
     get "/account/:id", AccountController, :show
     post "/account/update", AccountController, :update
     get "/accounts/sign_out", AccountController, :sign_out
+    get "/accounts/refresh_session", AccountController, :refresh_session
     delete "/account/delete/:id", AccountController, :delete
+    post "/users/update", UserController, :update
   end
 end

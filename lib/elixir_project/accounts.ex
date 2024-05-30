@@ -39,19 +39,25 @@ defmodule ElixirProject.Accounts do
 
   @doc """
   Gets a single account.
+  It preloads his user.
 
   Returns nil if the Account does not exist.
 
   ## Examples
 
-      iex> get_account!(123)
+      iex> get_account(123)
       %Account{}
 
-      iex> get_account!(456)
+      iex> get_account(456)
       nil
 
   """
-  def get_account(id), do: Repo.get(Account, id)
+  def get_account(id) do
+    Account
+    |> where(id: ^id)
+    |> preload(:user)
+    |> Repo.one()
+  end
 
   def get_account_by_email(email) do
     Account

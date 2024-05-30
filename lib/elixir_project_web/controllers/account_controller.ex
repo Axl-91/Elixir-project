@@ -1,27 +1,16 @@
 defmodule ElixirProjectWeb.AccountController do
   use ElixirProjectWeb, :controller
 
-  alias ElixirProjectWeb.Auth.ErrorResponse
   alias ElixirProject.Users
   alias ElixirProject.Users.User
   alias ElixirProjectWeb.Auth.Guardian
   alias ElixirProject.Accounts
   alias ElixirProject.Accounts.Account
 
-  plug :is_authorized_account when action in [:update, :delete]
+  import ElixirProjectWeb.Auth.AuthorizedPlug
+  plug :is_authorized when action in [:update, :delete]
 
   action_fallback ElixirProjectWeb.FallbackController
-
-  defp is_authorized_account(conn, _opts) do
-    %{params: %{"account" => params}} = conn
-    account = Accounts.get_account!(params["id"])
-
-    if conn.assigns.account.id == account.id do
-      conn
-    else
-      raise ErrorResponse.Forbidden
-    end
-  end
 
   def index(conn, _params) do
     accounts = Accounts.list_accounts()
@@ -30,20 +19,36 @@ defmodule ElixirProjectWeb.AccountController do
 
   def create(conn, %{"account" => account_params}) do
     with {:ok, %Account{} = account} <- Accounts.create_account(account_params),
-         {:ok, token, _claims} <- Guardian.encode_and_sign(account),
          {:ok, %User{} = _user} <- Users.create_user(account, account_params) do
-      conn
-      |> put_status(:created)
-      |> render(:account_token, account: account, token: token)
+      authorize_account(conn, account.email, account_params["hash_password"])
     end
   end
 
   def sign_in(conn, %{"email" => email, "hash_password" => hash_password}) do
+    authorize_account(conn, email, hash_password)
+  end
+
+  defp authorize_account(conn, email, hash_password) do
     with {:ok, account, token} <- Guardian.authenticate(email, hash_password) do
       conn
       |> put_session(:account_id, account.id)
       |> put_status(:ok)
       |> render(:account_token, %{account: account, token: token})
+    end
+  end
+
+  def refresh_session(conn, %{}) do
+    old_token = Guardian.Plug.current_token(conn)
+
+    case Guardian.authenticate(old_token) do
+      {:ok, account, new_token} ->
+        conn
+        |> Plug.Conn.put_session(:account_id, account.id)
+        |> put_status(:ok)
+        |> render(:account_token, %{account: account, token: new_token})
+
+      {:error, _reason} ->
+        {:error, :not_found}
     end
   end
 

@@ -6,6 +6,9 @@ defmodule ElixirProjectWeb.UserController do
 
   action_fallback ElixirProjectWeb.FallbackController
 
+  import ElixirProjectWeb.Auth.AuthorizedPlug
+  plug :is_authorized when action in [:update, :delete]
+
   def index(conn, _params) do
     users = Users.list_users()
     render(conn, :index, users: users)
@@ -24,8 +27,8 @@ defmodule ElixirProjectWeb.UserController do
     render(conn, :show, user: user)
   end
 
-  def update(conn, %{"id" => id, "user" => user_params}) do
-    user = Users.get_user!(id)
+  def update(conn, %{"user" => user_params}) do
+    user = conn.assigns.account.user
 
     with {:ok, %User{} = user} <- Users.update_user(user, user_params) do
       render(conn, :show, user: user)
